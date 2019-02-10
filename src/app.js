@@ -51,6 +51,6 @@ if (cluster.isMaster) {
       // }, 7000 - Math.random() * 5000);
     });
 
-  // console.log(`Worker ${process.pid} started`);
+  console.log(`Worker ${process.pid} started`);
 }
 module.exports = server;
