@@ -1,12 +1,25 @@
 {
-  "name": "test",
-  "version": "1.0.0",
+  "name": "appserve",
+  "version": "0.0.5",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "prashant dawar",
+  "license": "ISC",
+  "cpu": [
+    "x64",
+    "ia32"
+  ],
+  "os": [
+    "linux"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prashantdawar/appserve.git"
+  },
+  "homepage": "https://github.com/prashantdawar/appserve"
 }
