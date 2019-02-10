@@ -3,8 +3,8 @@ const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 const workerProcess = numCPUs > 4 ? numCPUs : 4;
 let server = require("http").createServer();
-let hostname = process.env.OPENSHIFT_NODEJS_IP;
-let port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3001;
+let port = process.env.PORT || 3001;
+//
 //
 //
 //
