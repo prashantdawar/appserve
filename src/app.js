@@ -1,8 +1,7 @@
 //
 const cluster = require("cluster");
-// const http = require('http');
-const numCPUs =
-  require("os").cpus().length > 4 ? require("os").cpus().length : 4;
+const numCPUs = require("os").cpus().length;
+const workerProcess = numCPUs > 4 ? numCPUs : 4;
 let server = require("http").createServer();
 let hostname = process.env.OPENSHIFT_NODEJS_IP;
 let port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3001;
@@ -13,7 +12,7 @@ if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
 
   // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < workerProcess; i++) {
     cluster.fork();
   }
 
