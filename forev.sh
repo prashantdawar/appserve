@@ -1,6 +1,6 @@
 # 
 while true
 do
-node app.js
+npm start
 sleep 1
 done
