@@ -52,7 +52,8 @@ if (cluster.isMaster) {
         //
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
-        let domainURL = host.slice(0, host.indexOf(":"));
+        // let domainURL = host.slice(0, host.indexOf(":"));
+        let domainURL = host;
         let domain = "";
         if (domainURL == "localhost") {
           domain = "localhost";
@@ -72,7 +73,6 @@ if (cluster.isMaster) {
           domainURL,
           sanitizePath
         );
-
         // https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback
         fs.open(pathname, "r", (err, fd) => {
           if (err) {
