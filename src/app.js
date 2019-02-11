@@ -26,7 +26,7 @@ const mimeType = {
   ".eot": "appliaction/vnd.ms-fontobject",
   ".ttf": "aplication/font-sfnt"
 };
-
+const www_path = process.env.WWW_PATH || "www";
 const workerProcess = numCPUs > 4 ? numCPUs : 4;
 let port = process.env.PORT || 3001;
 //
@@ -53,19 +53,22 @@ if (cluster.isMaster) {
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         let domainURL = host.slice(0, host.indexOf(":"));
-        let subDomain = domainURL.split(".");
-        //
-        //
-        let dExtenstion = subDomain.pop();
-        let domain = subDomain.pop();
-        // if (!isNaN(domain)) return reject({ statusCode: 502 });
+        let domain = "";
+        if (domainURL == "localhost") {
+          domain = "localhost";
+        } else {
+          let subDomain = domainURL.split(".");
+          let dExtenstion = subDomain.pop();
+          domain = subDomain.pop();
+        }
+        if (!isNaN(domain)) return reject({ statusCode: 502 });
         //
         const sanitizePath = path
           .normalize(req.url)
           .replace(/^(\.\.[\/\\])+/, "");
         let pathname = path.join(
           os.homedir(),
-          "www", // process.env.WWW_PATH,
+          www_path,
           domainURL,
           sanitizePath
         );
@@ -78,17 +81,28 @@ if (cluster.isMaster) {
             }
             return reject();
           }
-          return resolve(pathname);
+
+          fs.readFile(pathname, (err, data) => {
+            if (err) {
+              return reject();
+            }
+
+            const ext = path.parse(pathname).ext;
+
+            return resolve({ data, ext });
+          });
         });
+        // return resolve(pathname);
       });
 
       promise
         .then(resObj => {
           res.statusCode = resObj.statusCode || 200;
-          res.write(JSON.stringify(resObj));
+          res.setHeader("content-type", mimeType[resObj.ext]);
+          res.write(resObj.data);
         })
         .catch(err => {
-          // console.log(err);
+          console.log(err);
           res.statusCode = err.statusCode || 500;
         })
         .then(_ => {
