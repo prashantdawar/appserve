@@ -8,8 +8,28 @@ const path = require("path");
 const fs = require("fs");
 //
 //
+// maps file extention to MIME types
+const mimeType = {
+  ".ico": "image/x-icon",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".json": "application/json",
+  ".css": "text/css",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".wav": "audio/wav",
+  ".mp3": "audio/mpeg",
+  ".svg": "image/svg+xml",
+  //
+  ".pdf": "application/pdf",
+  ".doc": "application/msword",
+  ".eot": "appliaction/vnd.ms-fontobject",
+  ".ttf": "aplication/font-sfnt"
+};
+
 const workerProcess = numCPUs > 4 ? numCPUs : 4;
 let port = process.env.PORT || 3001;
+//
 if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
   // Fork workers.
@@ -43,8 +63,23 @@ if (cluster.isMaster) {
         const sanitizePath = path
           .normalize(req.url)
           .replace(/^(\.\.[\/\\])+/, "");
-        let pathname = path.join(os.homedir(), "www", domainURL, sanitizePath);
-        return resolve(pathname);
+        let pathname = path.join(
+          os.homedir(),
+          "www", // process.env.WWW_PATH,
+          domainURL,
+          sanitizePath
+        );
+
+        // https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback
+        fs.open(pathname, "r", (err, fd) => {
+          if (err) {
+            if (err.code === "ENOENT") {
+              return reject({ statusCode: 404 });
+            }
+            return reject();
+          }
+          return resolve(pathname);
+        });
       });
 
       promise
@@ -53,6 +88,7 @@ if (cluster.isMaster) {
           res.write(JSON.stringify(resObj));
         })
         .catch(err => {
+          // console.log(err);
           res.statusCode = err.statusCode || 500;
         })
         .then(_ => {
