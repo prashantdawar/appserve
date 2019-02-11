@@ -111,7 +111,7 @@ if (cluster.isMaster) {
       promise
         .then(resObj => {
           res.statusCode = resObj.statusCode || 200;
-          res.setHeader("content-type", mimeType[resObj.ext]);
+          res.setHeader("content-type", mimeType[resObj.ext] || "text/plain");
           res.write(resObj.data);
         })
         .catch(err => {
