@@ -53,6 +53,7 @@ if (cluster.isMaster) {
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
+        console.log(host);
         let domainURL = host;
         let domain = "";
         if (domainURL == "localhost") {
@@ -62,6 +63,7 @@ if (cluster.isMaster) {
           let dExtenstion = subDomain.pop();
           domain = subDomain.pop();
         }
+        console.log(domain);
         if (!isNaN(domain)) return reject({ statusCode: 502 });
         //
         const sanitizePath = path
@@ -73,6 +75,7 @@ if (cluster.isMaster) {
           domainURL,
           sanitizePath
         );
+        console.log(pathname);
         // https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback
         fs.open(pathname, "r", (err, fd) => {
           if (err) {
@@ -81,7 +84,6 @@ if (cluster.isMaster) {
             }
             return reject();
           }
-
           fs.readFile(pathname, (err, data) => {
             if (err) {
               return reject();
@@ -103,7 +105,7 @@ if (cluster.isMaster) {
         })
         .catch(err => {
           console.log(err);
-          res.statusCode = err.statusCode || 500;
+          res.statusCode = err ? err.statusCode || 500 : 500;
         })
         .then(_ => {
           res.end();
