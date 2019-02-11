@@ -3,5 +3,5 @@ trap "exit" INT
 while true
 do
 npm start
-sleep 1
+sleep 2
 done

@@ -3,8 +3,8 @@ const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 const workerProcess = numCPUs > 4 ? numCPUs : 4;
 let server = require("http").createServer();
-let hostname = process.env.OPENSHIFT_NODEJS_IP;
-let port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3001;
+const url = require("url");
+let port = process.env.PORT || 3001;
 //
 //
 //
@@ -24,26 +24,36 @@ if (cluster.isMaster) {
   server
     .on("request", (req, res) => {
       res.setHeader("content-type", "application/json");
-      let host = req.headers.host;
-      if (host.length > 50) {
-        res.statusCode = 404;
-        res.end();
-        return;
-      }
-      let subDomain = host.slice(0, host.indexOf(":")).split(".");
-      let domain = subDomain.pop();
-      if (!isNaN(domain)) {
-        res.statusCode = 502;
-        res.end();
+      let promise = new Promise((resolve, reject) => {
+        // let err = {};
+        if (req.method != "GET") {
+          return reject({ statusCode: 405 });
+        }
         //
-        return;
-      }
-      // res.write(JSON.stringify(Object.keys(req)));
-      res.write(JSON.stringify(host));
-      res.end();
-      return;
+        // hard limit on acceptable hostname
+        let host = req.headers.host;
+        if (host.length > 50) return reject({ statusCode: 404 });
+
+        let subDomain = host.slice(0, host.indexOf(":")).split(".");
+        let dExtenstion = subDomain.pop();
+        let domain = subDomain.pop();
+        // if (!isNaN(domain)) return reject({ statusCode: 502 });
+        return resolve(req.url);
+      });
+
+      promise
+        .then(resObj => {
+          res.statusCode = resObj.statusCode || 200;
+          res.write(JSON.stringify(resObj));
+        })
+        .catch(err => {
+          res.statusCode = err.statusCode || 500;
+        })
+        .then(_ => {
+          res.end();
+        });
     })
-    .listen(port, hostname, () => {
+    .listen(port, () => {
       console.log(`Server is running at PORT: ${port}`);
       // setTimeout(() => {
       //   process.exit();
