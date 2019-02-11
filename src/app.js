@@ -75,6 +75,9 @@ if (cluster.isMaster) {
           domainURL,
           sanitizePath
         );
+        if (fs.statSync(pathname).isDirectory()) {
+          pathname += "index.html";
+        }
         console.log(pathname);
         // https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback
         fs.open(pathname, "r", (err, fd) => {
@@ -84,13 +87,12 @@ if (cluster.isMaster) {
             }
             return reject();
           }
+          //
           fs.readFile(pathname, (err, data) => {
             if (err) {
               return reject();
             }
-
             const ext = path.parse(pathname).ext;
-
             return resolve({ data, ext });
           });
         });
