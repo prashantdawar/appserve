@@ -61,6 +61,8 @@ if (cluster.isMaster) {
           host.substr(0, 4).includes("www")
         ) {
           domainURL = host.substr(4);
+        } else {
+          return resolve({ statusCode: 301 });
         }
         let domain = "";
         if (domainURL == "localhost") {
@@ -111,8 +113,18 @@ if (cluster.isMaster) {
       promise
         .then(resObj => {
           res.statusCode = resObj.statusCode || 200;
-          res.setHeader("content-type", mimeType[resObj.ext] || "text/plain");
-          res.write(resObj.data);
+          switch (res.statusCode) {
+            case 200: {
+              res.setHeader("content-type", mimeType[resObj.ext] || "text/plain");
+              res.write(resObj.data);
+              break;
+            }
+            case 301: {
+              res.writeHead(301, { Location: `http://www.${req.headers["host"]}` });
+              break;
+            }
+
+          }
         })
         .catch(err => {
           console.log(err);
