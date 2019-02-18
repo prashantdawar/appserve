@@ -96,12 +96,12 @@ if (cluster.isMaster) {
             if (err.code === "ENOENT") {
               return reject({ statusCode: 404 });
             }
-            return reject();
+            return reject(err);
           }
           //
           fs.readFile(pathname, (err, data) => {
             if (err) {
-              return reject();
+              return reject(err);
             }
             const ext = path.parse(pathname).ext;
             return resolve({ data, ext });
