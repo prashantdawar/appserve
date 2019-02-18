@@ -87,7 +87,7 @@ if (cluster.isMaster) {
         if (fs.statSync(pathname).isDirectory()) {
           pathname += "index.html";
         }
-        console.log(pathname);
+
         //
         //
         // https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback
@@ -109,6 +109,7 @@ if (cluster.isMaster) {
         });
         // return resolve(pathname);
       });
+
 
       promise
         .then(resObj => {
