@@ -94,7 +94,7 @@ if (cluster.isMaster) {
         }
 
         //
-        //
+        console.log(pathname)
         // https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback
         fs.open(pathname, "r", (err, fd) => {
           if (err) {
