@@ -69,12 +69,13 @@ if (cluster.isMaster) {
           domain = "localhost";
         } else {
           let subDomain = domainURL.split(".");
+
+
           let dExtenstion = subDomain.pop();
           domain = subDomain.pop();
         }
         console.log(domain);
         if (!isNaN(domain)) return reject({ statusCode: 502 });
-        //
         const sanitizePath = path
           .normalize(req.url)
           .replace(/^(\.\.[\/\\])+/, "");
@@ -84,6 +85,10 @@ if (cluster.isMaster) {
           domainURL,
           sanitizePath
         );
+        console.log(pathname);
+
+
+
         if (fs.statSync(pathname).isDirectory()) {
           pathname += "index.html";
         }
