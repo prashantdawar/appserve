@@ -108,11 +108,17 @@ if (cluster.isMaster) {
 
 
             const ext = path.parse(pathname).ext;
-            return resolve({ data, ext });
+            fs.close(fd, (err) => {
+              if (err) throw err;
+
+              return resolve({ data, ext });
+            })
+
           });
         });
         // return resolve(pathname);
       });
+
 
 
       promise
