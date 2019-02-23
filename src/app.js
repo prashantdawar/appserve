@@ -75,7 +75,7 @@ else {
           let subDomain = hostname.split(".");
           console.log(subDomain);
           let dExtenstion = subDomain.pop();
-          console.lolg(subDomain);
+          console.log(subDomain);
           domain = subDomain.pop();
         }
         // console.log({ hostname, domain });
