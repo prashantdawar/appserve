@@ -72,7 +72,7 @@ else {
         }
 
         else {
-          let subDomain = domainURL.split(".");
+          let subDomain = hostname.split(".");
           let dExtenstion = subDomain.pop();
           domain = subDomain.pop();
         }
