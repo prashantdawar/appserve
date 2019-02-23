@@ -50,7 +50,6 @@ else {
           return reject({ statusCode: 405 });
         }
         // hard limit on acceptable hostname
-
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
@@ -74,10 +73,12 @@ else {
 
         else {
           let subDomain = hostname.split(".");
+          console.log(subDomain);
           let dExtenstion = subDomain.pop();
+          console.lolg(subDomain);
           domain = subDomain.pop();
         }
-        console.log({ hostname, domain });
+        // console.log({ hostname, domain });
         if (!isNaN(domain)) return reject({ statusCode: 502 });
         const sanitizePath = path
           .normalize(req.url)
@@ -88,7 +89,7 @@ else {
           siteDir,
           sanitizePath
         );
-        console.log(pathname);
+        // console.log(pathname);
 
 
 
