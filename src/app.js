@@ -49,7 +49,7 @@ if (cluster.isMaster) {
           return reject({ statusCode: 405 });
         }
         // hard limit on acceptable hostname
-        console.log(req);
+
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
