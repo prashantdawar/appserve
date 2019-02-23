@@ -49,7 +49,7 @@ if (cluster.isMaster) {
           return reject({ statusCode: 405 });
         }
         // hard limit on acceptable hostname
-        //
+        console.log(req.headers);
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
@@ -108,12 +108,8 @@ if (cluster.isMaster) {
 
 
             const ext = path.parse(pathname).ext;
-            fs.close(fd, (err) => {
-              if (err) throw err;
-
-              return resolve({ data, ext });
-            })
-
+            fs.close(fd, (err) => { if (err) throw err; });
+            return resolve({ data, ext });
           });
         });
         // return resolve(pathname);
