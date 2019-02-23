@@ -53,7 +53,7 @@ else {
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
-        console.log(host);
+        console.log({ host });
         let hostname = url.parse(`http://${host}`).hostname;
         let siteDir = hostname;
         if (
