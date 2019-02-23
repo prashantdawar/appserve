@@ -114,20 +114,18 @@ else {
         });
         // return resolve(pathname);
       });
-
-
-
-
       promise
         .then(resObj => {
           res.statusCode = resObj.statusCode || 200;
           switch (res.statusCode) {
             case 200: {
               res.setHeader("content-type", mimeType[resObj.ext] || "text/plain");
+
               res.write(resObj.data);
               break;
             }
             case 301: {
+
               res.writeHead(301, { Location: `http://www.${req.headers["host"]}` });
               break;
             }
