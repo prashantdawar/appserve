@@ -39,7 +39,8 @@ if (cluster.isMaster) {
   cluster.on("exit", (worker, code, signal) => {
     console.log(`worker ${worker.process.pid} died`);
   });
-} else {
+}
+else {
   // Workers can share any TCP connection
   server
     .on("request", (req, res) => {
@@ -54,27 +55,27 @@ if (cluster.isMaster) {
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
         console.log(host);
-
-        let domainURL = host;
+        let hostname = url.parse(`http://${host}`).hostname;
         if (
           host.substr(0, 4).includes(".") &&
           host.substr(0, 4).includes("www")
         ) {
-          domainURL = host.substr(4);
+          hostname = host.substr(4);
         } else {
-          return resolve({ statusCode: 301 });
+          if (hostname != "localhost") {
+            return resolve({ statusCode: 301 });
+          }
         }
         let domain = "";
-        if (domainURL == "localhost") {
+        if (hostname == "localhost") {
           domain = "localhost";
-        } else {
+        }
+
+        else {
           let subDomain = domainURL.split(".");
-
-
           let dExtenstion = subDomain.pop();
           domain = subDomain.pop();
         }
-        console.log(domain);
         if (!isNaN(domain)) return reject({ statusCode: 502 });
         const sanitizePath = path
           .normalize(req.url)
@@ -82,7 +83,7 @@ if (cluster.isMaster) {
         let pathname = path.join(
           os.homedir(),
           www_path,
-          domainURL,
+          hostname,
           sanitizePath
         );
         console.log(pathname);
@@ -114,6 +115,7 @@ if (cluster.isMaster) {
         });
         // return resolve(pathname);
       });
+
 
 
 
