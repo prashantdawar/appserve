@@ -73,9 +73,7 @@ else {
 
         else {
           let subDomain = hostname.split(".");
-          console.log(subDomain);
           let dExtenstion = subDomain.pop();
-          console.log(subDomain);
           domain = subDomain.pop();
         }
         // console.log({ hostname, domain });
@@ -89,8 +87,6 @@ else {
           siteDir,
           sanitizePath
         );
-        // console.log(pathname);
-
 
 
         if (fs.statSync(pathname).isDirectory()) {
