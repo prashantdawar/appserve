@@ -49,18 +49,18 @@ if (cluster.isMaster) {
           return reject({ statusCode: 405 });
         }
         // hard limit on acceptable hostname
-        console.log(req.headers);
+        // console.log(req);
         let host = req.headers.host;
         // if (host.length > 50) return reject({ statusCode: 404 });
         // let domainURL = host.slice(0, host.indexOf(":"));
-        console.log(host);
-
-        let domainURL = host;
+        let hostname = url.parse(host).hostname;
+        console.log(hostname);
+        let domainURL = hostname;
         if (
-          host.substr(0, 4).includes(".") &&
-          host.substr(0, 4).includes("www")
+          hostname.substr(0, 4).includes(".") &&
+          hostname.substr(0, 4).includes("www")
         ) {
-          domainURL = host.substr(4);
+          domainURL = hostname.substr(4);
         } else {
           return resolve({ statusCode: 301 });
         }
