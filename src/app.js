@@ -76,6 +76,7 @@ else {
           let dExtenstion = subDomain.pop();
           domain = subDomain.pop();
         }
+        console.log({ hostname, domain });
         if (!isNaN(domain)) return reject({ statusCode: 502 });
         const sanitizePath = path
           .normalize(req.url)
