@@ -56,11 +56,12 @@ else {
         // let domainURL = host.slice(0, host.indexOf(":"));
         console.log(host);
         let hostname = url.parse(`http://${host}`).hostname;
+        let siteDir = hostname;
         if (
-          host.substr(0, 4).includes(".") &&
-          host.substr(0, 4).includes("www")
+          hostname.substr(0, 4).includes(".") &&
+          hostname.substr(0, 4).includes("www")
         ) {
-          hostname = host.substr(4);
+          siteDir = hostname.substr(4);
         } else {
           if (hostname != "localhost") {
             return resolve({ statusCode: 301 });
@@ -84,7 +85,7 @@ else {
         let pathname = path.join(
           os.homedir(),
           www_path,
-          hostname,
+          siteDir,
           sanitizePath
         );
         console.log(pathname);
