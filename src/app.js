@@ -118,7 +118,7 @@ else {
             res.write(chunk);
           });
           src.on('end', () => {
-            return resolve();
+            return resolve({});
           })
 
           src.on('err', (err) => {
