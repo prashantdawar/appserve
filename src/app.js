@@ -152,14 +152,11 @@ else {
       //   process.exit();
       // }, 7000 - Math.random() * 5000);
     });
-
   setInterval(() => {
     server.getConnections((err, count) => {
       console.log({ count });
     });
   }, 500);
-
-
   console.log(`Worker ${process.pid} started`);
 }
 module.exports = server;
