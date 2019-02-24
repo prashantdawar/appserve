@@ -101,31 +101,37 @@ else {
             }
             return reject(err);
           }
-          fs.readFile(pathname, (err, data) => {
-            if (err) {
-              return reject(err);
-            }
+          // fs.readFile(pathname, (err, data) => {
+          //   if (err) {
+          //     return reject(err);
+          //   }
 
 
-            const ext = path.parse(pathname).ext;
-            fs.close(fd, (err) => { if (err) throw err; });
-            return resolve({ data, ext });
+          //   const ext = path.parse(pathname).ext;
+          //   fs.close(fd, (err) => { if (err) throw err; });
+          //   return resolve({ data, ext });
+          // });
+          const ext = path.parse(pathname).ext;
+          res.setHeader("content-type", mimeType[ext] || "text/plain");
+          const src = fs.createReadStream(pathname);
+          src.on('data', (chunk) => {
+            res.write(chunk);
           });
+          src.on('end', () => {
+            return resolve();
+          })
+
+          src.on('err', (err) => {
+            return reject(err);
+          })
         });
-        // return resolve(pathname);
       });
       promise
         .then(resObj => {
           res.statusCode = resObj.statusCode || 200;
+
           switch (res.statusCode) {
-            case 200: {
-              res.setHeader("content-type", mimeType[resObj.ext] || "text/plain");
-
-              res.write(resObj.data);
-              break;
-            }
             case 301: {
-
               res.writeHead(301, { Location: `http://www.${req.headers["host"]}` });
               break;
             }
