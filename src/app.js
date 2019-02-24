@@ -110,10 +110,7 @@ else {
           //   const ext = path.parse(pathname).ext;
           //   fs.close(fd, (err) => { if (err) throw err; });
           //   return resolve({ data, ext });
-          // });
-          server.getConnections((err, count) => {
-            console.log({ count });
-          });
+          // });          
           const ext = path.parse(pathname).ext;
           res.setHeader("content-type", mimeType[ext] || "text/plain");
           const src = fs.createReadStream(pathname);
@@ -155,6 +152,13 @@ else {
       //   process.exit();
       // }, 7000 - Math.random() * 5000);
     });
+
+  setInterval(() => {
+    server.getConnections((err, count) => {
+      console.log({ count });
+    });
+  }, 500);
+
 
   console.log(`Worker ${process.pid} started`);
 }
