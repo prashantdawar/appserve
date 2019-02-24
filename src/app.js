@@ -111,6 +111,9 @@ else {
           //   fs.close(fd, (err) => { if (err) throw err; });
           //   return resolve({ data, ext });
           // });
+          server.getConnections((err, count) => {
+            console.log({ count });
+          });
           const ext = path.parse(pathname).ext;
           res.setHeader("content-type", mimeType[ext] || "text/plain");
           const src = fs.createReadStream(pathname);
