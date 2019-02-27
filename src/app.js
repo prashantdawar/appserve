@@ -115,7 +115,7 @@ else {
           res.setHeader("content-type", mimeType[ext] || "text/plain");
           const src = fs.createReadStream(pathname);
           src.on('data', (chunk) => {
-            res.write(chunk);
+            console.log(res.write(chunk));
           });
           src.on('end', () => {
             return resolve({});
