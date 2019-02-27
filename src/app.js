@@ -24,7 +24,8 @@ const mimeType = {
   ".pdf": "application/pdf",
   ".doc": "application/msword",
   ".eot": "appliaction/vnd.ms-fontobject",
-  ".ttf": "aplication/font-sfnt"
+  ".ttf": "aplication/font-sfnt",
+  ".xml": "text/xml"
 };
 const www_path = process.env.WWW_PATH || "www";
 const workerProcess = numCPUs > 4 ? numCPUs : 4;
